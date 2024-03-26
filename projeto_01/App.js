@@ -1,9 +1,10 @@
+import React, { useState } from 'react';
+import { View, StyleSheet, FlatList } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View, Image, Dimensions, FlatList } from 'react-native';
 import Constants from 'expo-constants';
 import Header from './components/Header';
 import Post from './components/post';
+import LoginScreen from './LoginScreen';
 
 const postsData = [
   { id: '1', title: 'Post 1', content: 'Conteúdo do post 1', imageUrl: 'https://welcometozante.com/wp-content/uploads/2021/01/party-zakynthos-welcometozante.jpg' },
@@ -18,24 +19,37 @@ const postsData = [
   { id: '10', title: 'Post 10', content: 'Conteúdo do post 10', imageUrl: 'https://i0.wp.com/assets.b9.com.br/wp-content/uploads/2021/03/shows-ao-vivo.jpg?fit=1280%2C720&ssl=1' },
 ];
 
-export default function App() {
+const MainScreen = () => {
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  const handleLogin = (username, password) => {
+    if (username.trim() !== '' && password.trim() !== '') {
+      setLoggedIn(true);
+    }
+  };
+
   const renderItem = ({ item }) => <Post item={item} />;
 
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      <Header />
-      <View style={styles.postsContainer}>
-        <FlatList
-          data={postsData}
-          renderItem={renderItem}
-          keyExtractor={item => item.id}
-        />
-      </View>
+      {!loggedIn && <LoginScreen onLogin={handleLogin} />}
+      {loggedIn && (
+        <>
+          <Header/>
+          <View style={styles.postsContainer}>
+            <FlatList
+              data={postsData}
+              renderItem={renderItem}
+              keyExtractor={item => item.id}
+            />
+          </View>
+        </>
+      )}
     </View>
   );
-  
-}
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -48,6 +62,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+export default MainScreen;
+
 
 
 
