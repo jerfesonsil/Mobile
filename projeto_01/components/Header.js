@@ -23,8 +23,8 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    height: windowHeight * 0.08,
+    alignItems: 'flex-end',
+    height: windowHeight * 0.1, // Ajusta a altura do cabeçalho
     backgroundColor: '#fff',
     paddingHorizontal: 10,
   },

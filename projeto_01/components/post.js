@@ -1,17 +1,24 @@
 import React from 'react';
-import { StyleSheet, View, Image, Text, Dimensions } from 'react-native';
+import { StyleSheet, View, Image, Text, Dimensions, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const windowHeight = Dimensions.get('window').height;
 
 export default function Post({ item }) {
+  const navigation = useNavigation();
+
+  const handlePress = () => {
+        navigation.navigate('PostDetailScreen', { postDetails: item });
+  };
+
   return (
-    <View style={styles.postContainer}>
+    <TouchableOpacity style={styles.postContainer} onPress={handlePress}>
       <Image source={{ uri: item.imageUrl }} style={styles.backgroundImage} />
       <View style={styles.textContainer}>
         <Text style={styles.postTitle}>{item.title}</Text>
         <Text style={styles.postContent}>{item.content}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
@@ -36,14 +43,13 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flex: 1,
-    maxWidth: '70%', // Definindo a largura máxima como 50% da largura da imagem
+    maxWidth: '70%',
     height: '100%',
-    
-    justifyContent: 'space-between', // Distribui espaço uniformemente entre os elementos
-    alignItems: 'flex-start', // Alinha os itens ao início do eixo transversal
-    paddingHorizontal: 2, // Adiciona preenchimento horizontal
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    paddingHorizontal: 2,
     zIndex: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.5)', // Adiciona um fundo branco translúcido para os textos
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
   },
   postTitle: {
     fontSize: 18,
@@ -55,5 +61,8 @@ const styles = StyleSheet.create({
     marginTop: 0, 
   },
 });
+
+
+
 
 

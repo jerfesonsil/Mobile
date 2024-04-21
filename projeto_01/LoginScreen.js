@@ -14,9 +14,7 @@ const LoginScreen = ({ onLogin }) => {
 
   return (
     <View style={styles.container}>
-      
       <Image style={styles.juntai} source={require('./assets/JuntAí.png')} />
-      
       <TextInput
         style={styles.input}
         placeholder="Username"
@@ -69,3 +67,5 @@ const styles = StyleSheet.create({
 });
 
 export default LoginScreen;
+
+
