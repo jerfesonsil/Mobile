@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MainScreen from './MainScreen';
 import PostDetailScreen from './PostDetailScreen';
+import CreatePostScreen from './CreatePostScreen'; // Importe a tela de criação de post
 import { Ionicons } from '@expo/vector-icons';
 
 const Stack = createStackNavigator();
@@ -32,6 +33,17 @@ const TabNavigator = () => {
           headerShown: false,
         }} 
       />
+      <Tab.Screen 
+        name="CreatePost" 
+        component={CreatePostScreen} 
+        options={{
+          tabBarLabel: 'Create Post',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="add-circle" size={size} color={color} />
+          ),
+          headerShown: false,
+        }} 
+      />
     </Tab.Navigator>
   );
 };
@@ -45,16 +57,4 @@ const App = () => {
 };
 
 export default App;
-
-
-
-
-
-
-
-
-
-
-
-
 

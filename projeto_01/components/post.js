@@ -8,7 +8,8 @@ export default function Post({ item }) {
   const navigation = useNavigation();
 
   const handlePress = () => {
-        navigation.navigate('PostDetailScreen', { postDetails: item });
+    console.log('Detalhes do post:', item);
+    navigation.navigate('PostDetailScreen', { postDetails: item });
   };
 
   return (
@@ -16,7 +17,12 @@ export default function Post({ item }) {
       <Image source={{ uri: item.imageUrl }} style={styles.backgroundImage} />
       <View style={styles.textContainer}>
         <Text style={styles.postTitle}>{item.title}</Text>
-        <Text style={styles.postContent}>{item.content}</Text>
+        <Text style={styles.postLabel}>Date:</Text>
+        <Text style={styles.postDetails}>{item.date}</Text>
+        <Text style={styles.postLabel}>Location:</Text>
+        <Text style={styles.postDetails}>{item.location}</Text>
+        <Text style={styles.postLabel}>Tags:</Text>
+        <Text style={styles.postDetails}>{item.tags.join(', ')}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -52,15 +58,21 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.5)',
   },
   postTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 25, // Tamanho um pouco maior
+    fontWeight: 'bold', // Negrito
     marginBottom: 5,
   },
-  postContent: {
-    fontSize: 14,
-    marginTop: 0, 
+  postLabel: {
+    fontSize: 20, // Tamanho um pouco maior
+    fontWeight: 'bold', // Negrito
+  },
+  postDetails: {
+    fontSize: 15,
+    marginTop: 0,
   },
 });
+
+
 
 
 

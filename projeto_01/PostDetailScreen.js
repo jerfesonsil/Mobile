@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ImageBackground } from 'react-native';
+import { StyleSheet, View, Text, ImageBackground } from 'react-native';
 
 const PostDetailScreen = ({ route }) => {
   // Extrair os detalhes do post dos parâmetros de navegação
@@ -11,16 +11,17 @@ const PostDetailScreen = ({ route }) => {
       <View style={styles.upperContainer}>
         {/* Usar ImageBackground para exibir a imagem como plano de fundo */}
         <ImageBackground source={{ uri: postDetails.imageUrl }} style={styles.imageBackground}>
-          {/* Exibir o título e o conteúdo do post */}
-          <Text style={styles.postTitle}>{postDetails.title}</Text>
-          <Text style={styles.postContent}>{postDetails.content}</Text>
+          {/* Exibir o título e outros detalhes do post */}
+          <Text style={styles.title}>{postDetails.title}</Text>
+          <Text style={styles.date}>Data: {postDetails.date}</Text>
+          <Text style={styles.location}>Local: {postDetails.location}</Text>
+          <Text style={styles.tags}>Tags: {postDetails.tags.join(', ')}</Text>
         </ImageBackground>
       </View>
       {/* Segunda parte (70% da tela) */}
       <View style={styles.lowerContainer}>
-        <Text>Detalhes do Post</Text>
-        <Text>ID: {postDetails.id}</Text>
-        {/* Exibir outras informações do post conforme necessário */}
+        {/* Aqui você pode adicionar mais detalhes do post, se necessário */}
+        <Text style={styles.content}>{postDetails.content}</Text>
       </View>
     </View>
   );
@@ -36,29 +37,42 @@ const styles = StyleSheet.create({
   lowerContainer: {
     flex: 7, // 70% da tela
     backgroundColor: '#ffffff', // Cor de fundo da parte inferior
-    justifyContent: 'center',
-    alignItems: 'center',
+    padding: 20, // Espaçamento interno
   },
   imageBackground: {
     flex: 1,
     resizeMode: 'cover',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20, // Adiciona um espaçamento interno para os textos
   },
-  postTitle: {
+  title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,
-    color: '#fff', // Cor do texto: preto
+    color: '#fff', // Cor do texto: branco
   },
-  postContent: {
+  date: {
     fontSize: 16,
-    color: '#fff', // Cor do texto: preto
+    color: '#fff', // Cor do texto: branco
+  },
+  location: {
+    fontSize: 16,
+    color: '#fff', // Cor do texto: branco
+  },
+  tags: {
+    fontSize: 16,
+    color: '#fff', // Cor do texto: branco
+  },
+  content: {
+    fontSize: 16,
+    color: '#000', // Cor do texto: preto
   },
 });
 
 export default PostDetailScreen;
+
+
+
 
 
 

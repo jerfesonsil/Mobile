@@ -25,16 +25,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'flex-end',
     height: windowHeight * 0.1, // Ajusta a altura do cabeçalho
-    backgroundColor: '#fff',
     paddingHorizontal: 10,
   },
-  imageContainer: {},
   juntai: {
-    height: windowHeight * 0.05,
+    height: windowHeight * 0.07,
     width: windowWidth * 0.3,
     resizeMode: 'contain',
   },
   iconsContainer: {
+    height: windowHeight * 0.045,
     flexDirection: 'row',
   },
   icon: {
