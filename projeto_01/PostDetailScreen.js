@@ -1,4 +1,5 @@
 import React from 'react';
+import Header from './components/Header';
 import { StyleSheet, View, Text, ImageBackground } from 'react-native';
 
 const PostDetailScreen = ({ route }) => {
@@ -7,6 +8,7 @@ const PostDetailScreen = ({ route }) => {
 
   return (
     <View style={styles.container}>
+      <Header />
       {/* Primeira parte (30% da tela) */}
       <View style={styles.upperContainer}>
         {/* Usar ImageBackground para exibir a imagem como plano de fundo */}
@@ -20,8 +22,8 @@ const PostDetailScreen = ({ route }) => {
       </View>
       {/* Segunda parte (70% da tela) */}
       <View style={styles.lowerContainer}>
-        {/* Aqui você pode adicionar mais detalhes do post, se necessário */}
-        <Text style={styles.content}>{postDetails.content}</Text>
+        {/* <Text style={styles.content}>{postDetails.content}</Text> */}
+        
       </View>
     </View>
   );

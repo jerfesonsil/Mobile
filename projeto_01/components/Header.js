@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Image, StyleSheet, Dimensions } from 'react-native';
-import { FontAwesome5 } from '@expo/vector-icons';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -11,10 +10,7 @@ const Header = () => {
       <View style={styles.imageContainer}>
         <Image style={styles.juntai} source={require('../assets/JuntAí.png')} />
       </View>
-      <View style={styles.iconsContainer}>
-        <FontAwesome5 name="search" size={24} color="black" style={styles.icon} />
-        <FontAwesome5 name="user" size={24} color="black" style={styles.icon} />
-      </View>
+
     </View>
   );
 };

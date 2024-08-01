@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MainScreen from './MainScreen';
 import PostDetailScreen from './PostDetailScreen';
-import CreatePostScreen from './CreatePostScreen'; // Importe a tela de criação de post
+import CreatePostScreen from './CreatePostScreen';
+import LoginScreen from './LoginScreen';
 import { Ionicons } from '@expo/vector-icons';
 
 const Stack = createStackNavigator();
@@ -14,7 +15,7 @@ const MainStack = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen name="MainScreen" component={MainScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="PostDetailScreen" component={PostDetailScreen} />
+      <Stack.Screen name="PostDetailScreen" component={PostDetailScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 };
@@ -26,7 +27,7 @@ const TabNavigator = () => {
         name="MainTab" 
         component={MainStack} 
         options={{
-          tabBarLabel: 'Main',
+          tabBarLabel: 'Home',
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="home" size={size} color={color} />
           ),
@@ -49,12 +50,34 @@ const TabNavigator = () => {
 };
 
 const App = () => {
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  const handleLogin = (username, password) => {
+    if (username.trim() !== '' && password.trim() !== '') {
+      setLoggedIn(true);
+    }
+  };
+
   return (
     <NavigationContainer>
-      <TabNavigator />
+      <Stack.Navigator>
+        {loggedIn ? (
+          <Stack.Screen
+            name="TabNavigator"
+            component={TabNavigator}
+            options={{ headerShown: false }}
+          />
+        ) : (
+          <Stack.Screen
+            name="LoginScreen"
+            options={{ headerShown: false }}
+          >
+            {props => <LoginScreen {...props} onLogin={handleLogin} />}
+          </Stack.Screen>
+        )}
+      </Stack.Navigator>
     </NavigationContainer>
   );
 };
 
 export default App;
-
