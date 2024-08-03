@@ -8,7 +8,7 @@ export default function Post({ item }) {
   const navigation = useNavigation();
 
   const handlePress = () => {
-    console.log('Detalhes do post:', item);
+   // console.log('Detalhes do post:', item);
     navigation.navigate('PostDetailScreen', { postDetails: item });
   };
 

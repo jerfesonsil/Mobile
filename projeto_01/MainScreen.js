@@ -1,29 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, StyleSheet, FlatList, RefreshControl } from 'react-native';
 import Header from './components/Header';
-import PostsContainer from './components/PostsContainer';
 import Post from './components/Post';
 import { db } from './firebaseConfig';
 import { collection, getDocs } from "firebase/firestore";
 
 const MainScreen = ({ navigation }) => {
   const [postsData, setPostsData] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const fetchData = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "events"));
+      const data = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setPostsData(data);
+    } catch (error) {
+      console.error("Erro ao buscar dados: ", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "events"));
-        const data = querySnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-        setPostsData(data);
-      } catch (error) {
-        console.error("Erro ao buscar dados: ", error);
-      }
-    };
-
     fetchData();
+  }, []);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await fetchData();
+    setRefreshing(false);
   }, []);
 
   const renderItem = ({ item }) => <Post item={item} />;
@@ -31,10 +37,16 @@ const MainScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Header />
-      <PostsContainer
+      <FlatList
         data={postsData}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
       />
     </View>
   );
@@ -47,3 +59,4 @@ const styles = StyleSheet.create({
 });
 
 export default MainScreen;
+

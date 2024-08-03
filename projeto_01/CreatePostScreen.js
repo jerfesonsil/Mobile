@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Button, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, Button, ScrollView, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Header from './components/Header';
 import FormElements from './components/FormElements';
+import { collection, addDoc, getDocs } from 'firebase/firestore';
+import { db } from './firebaseConfig'; // Importar a configuração do Firebase
 
 const CreatePostScreen = () => {
   const navigation = useNavigation();
@@ -13,29 +15,28 @@ const CreatePostScreen = () => {
   const [postLocation, setPostLocation] = useState('');
   const [selectedTags, setSelectedTags] = useState([]);
   const [showTags, setShowTags] = useState(false); // Estado para mostrar ou ocultar as tags
+  const [availableTags, setAvailableTags] = useState([]);
+  const [imageUrls, setImageUrls] = useState([]);
 
-  const availableTags = [
-    'Churrasco', 
-    'Concerto', 
-    'Festival', 
-    'Show', 
-    'Workshop', 
-    'Música Eletrônica', 
-    'Forró', 
-    'Sertanejo', 
-    'Open Bar', 
-    'Ar Livre',
-    'Balada',
-    'Piquenique',
-    'Carnaval',
-    'Feira',
-    'Exposição',
-    'Rave',
-    'Aniversário',
-    'Casamento',
-    'Encontro Cultural',
-    'Feira Gastronômica',
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Buscar tags do Firestore
+        const tagsSnapshot = await getDocs(collection(db, 'tags'));
+        const tagsData = tagsSnapshot.docs.map(doc => doc.data().tags).flat();
+        setAvailableTags(tagsData);
+
+        // Buscar URLs de imagens do Firestore
+        const imagesSnapshot = await getDocs(collection(db, 'images'));
+        const imagesData = imagesSnapshot.docs.map(doc => doc.data().urls).flat();
+        setImageUrls(imagesData);
+      } catch (error) {
+        console.error("Erro ao buscar dados: ", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handlePostTitleChange = (text) => {
     setPostTitle(text);
@@ -63,20 +64,32 @@ const CreatePostScreen = () => {
     }
   };
 
-  const handlePostCreation = () => {
-    console.log('Título do Post:', postTitle);
-    console.log('Conteúdo do Post:', postContent);
-    console.log('Data do Evento:', postDate);
-    console.log('Local do Evento:', postLocation);
-    console.log('Tags do Evento:', selectedTags);
+  const handlePostCreation = async () => {
+    try {
+      const randomImageUrl = imageUrls[Math.floor(Math.random() * imageUrls.length)];
+      const newPostRef = await addDoc(collection(db, 'events'), {
+        title: postTitle,
+        content: postContent,
+        date: postDate,
+        location: postLocation,
+        tags: selectedTags,
+        imageUrl: randomImageUrl, // Adiciona a URL da imagem ao documento
+      });
 
-    setPostTitle('');
-    setPostContent('');
-    setPostDate('');
-    setPostLocation('');
-    setSelectedTags([]);
+      Alert.alert('Sucesso', 'Post adicionado com sucesso!');
 
-    navigation.navigate('MainScreen');
+      setPostTitle('');
+      setPostContent('');
+      setPostDate('');
+      setPostLocation('');
+      setSelectedTags([]);
+
+      console.log('Novo post criado com ID:', newPostRef.id);
+
+      navigation.navigate('MainScreen');
+    } catch (error) {
+      Alert.alert('Erro', `Erro ao adicionar post: ${error.message}`);
+    }
   };
 
   const isPostReady =
@@ -132,3 +145,4 @@ const styles = StyleSheet.create({
 });
 
 export default CreatePostScreen;
+
