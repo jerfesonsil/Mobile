@@ -1,22 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Button, ScrollView, Alert } from 'react-native';
+// CreatePostScreen.js
+import React, { useState, useEffect, useRef } from 'react';
+import { View, StyleSheet, Button, ScrollView, Alert, Dimensions, Animated } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Header from './components/Header';
+import Header, { HEADER_HEIGHT } from './components/Header'; 
 import FormElements from './components/FormElements';
+import Carousel from './components/Carousel'; 
 import { collection, addDoc, getDocs } from 'firebase/firestore';
-import { db } from './firebaseConfig'; // Importar a configuração do Firebase
+import { db } from './firebaseConfig'; 
+import TopBar, { TAPBAR_HEIGHT } from './components/TopBar';
 
 const CreatePostScreen = () => {
   const navigation = useNavigation();
-
   const [postTitle, setPostTitle] = useState('');
   const [postContent, setPostContent] = useState('');
   const [postDate, setPostDate] = useState('');
   const [postLocation, setPostLocation] = useState('');
   const [selectedTags, setSelectedTags] = useState([]);
-  const [showTags, setShowTags] = useState(false); // Estado para mostrar ou ocultar as tags
+  const [showTags, setShowTags] = useState(false);
   const [availableTags, setAvailableTags] = useState([]);
   const [imageUrls, setImageUrls] = useState([]);
+  const [selectedImage, setSelectedImage] = useState('');
+  const scrollY = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,7 +51,6 @@ const CreatePostScreen = () => {
   };
 
   const handlePostDateChange = (text) => {
-    // Formatando a data para "DD/MM/YYYY"
     const formattedDate = text.replace(/[^0-9]/g, '').replace(/(.{2})(.{2})(.{4})/, '$1/$2/$3');
     setPostDate(formattedDate);
   };
@@ -66,14 +69,13 @@ const CreatePostScreen = () => {
 
   const handlePostCreation = async () => {
     try {
-      const randomImageUrl = imageUrls[Math.floor(Math.random() * imageUrls.length)];
       const newPostRef = await addDoc(collection(db, 'events'), {
         title: postTitle,
         content: postContent,
         date: postDate,
         location: postLocation,
         tags: selectedTags,
-        imageUrl: randomImageUrl, // Adiciona a URL da imagem ao documento
+        imageUrl: selectedImage || imageUrls[Math.floor(Math.random() * imageUrls.length)],
       });
 
       Alert.alert('Sucesso', 'Post adicionado com sucesso!');
@@ -83,6 +85,7 @@ const CreatePostScreen = () => {
       setPostDate('');
       setPostLocation('');
       setSelectedTags([]);
+      setSelectedImage('');
 
       console.log('Novo post criado com ID:', newPostRef.id);
 
@@ -98,10 +101,26 @@ const CreatePostScreen = () => {
     postDate.trim() !== '' &&
     postLocation.trim() !== '';
 
+  const headerTranslateY = scrollY.interpolate({
+    inputRange: [0, HEADER_HEIGHT],
+    outputRange: [TAPBAR_HEIGHT, -HEADER_HEIGHT-10],
+    extrapolate: 'clamp'
+  });
+
   return (
     <View style={styles.container}>
-      <Header />
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <TopBar />
+      <Animated.View style={[styles.header, { transform: [{ translateY: headerTranslateY }] }]}>
+        <Header />
+      </Animated.View>
+      <Animated.ScrollView 
+        contentContainerStyle={styles.scrollContainer}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+          { useNativeDriver: false }
+        )}
+        scrollEventThrottle={16}
+      >
         <FormElements
           postTitle={postTitle}
           handlePostTitleChange={handlePostTitleChange}
@@ -117,7 +136,8 @@ const CreatePostScreen = () => {
           showTags={showTags}
           setShowTags={setShowTags}
         />
-      </ScrollView>
+        <Carousel imageUrls={imageUrls} selectedImage={selectedImage} setSelectedImage={setSelectedImage} />
+      </Animated.ScrollView>
       <View style={styles.buttonContainer}>
         <Button
           title="Publicar Evento"
@@ -133,8 +153,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  header: {
+    height: HEADER_HEIGHT,
+    width: '100%',
+    position: 'absolute',
+  },
   scrollContainer: {
     flexGrow: 1,
+    paddingTop: HEADER_HEIGHT, // Adiciona espaço para o header
     paddingVertical: 20,
     paddingHorizontal: 20,
   },
@@ -145,4 +171,3 @@ const styles = StyleSheet.create({
 });
 
 export default CreatePostScreen;
-

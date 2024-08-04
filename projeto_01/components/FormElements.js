@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TextInput, TouchableOpacity, Text, Button } from 'react-native';
+import { View, TextInput, TouchableOpacity, Text, Button, StyleSheet } from 'react-native';
 
 const FormElements = ({
   postTitle,
@@ -69,7 +69,7 @@ const FormElements = ({
   );
 };
 
-const styles = {
+const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
     paddingBottom: 20,
@@ -114,6 +114,6 @@ const styles = {
     color: '#333',
     fontSize: 16,
   },
-};
+});
 
 export default FormElements;

@@ -1,5 +1,6 @@
 import React from 'react';
 import Header from './components/Header';
+import TopBar from './components/TopBar'
 import { StyleSheet, View, Text, ImageBackground } from 'react-native';
 
 const PostDetailScreen = ({ route }) => {
@@ -8,6 +9,7 @@ const PostDetailScreen = ({ route }) => {
 
   return (
     <View style={styles.container}>
+      <TopBar/>
       <Header />
       {/* Primeira parte (30% da tela) */}
       <View style={styles.upperContainer}>
@@ -72,11 +74,3 @@ const styles = StyleSheet.create({
 });
 
 export default PostDetailScreen;
-
-
-
-
-
-
-
-

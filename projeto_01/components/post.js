@@ -58,12 +58,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.5)',
   },
   postTitle: {
-    fontSize: 25, // Tamanho um pouco maior
+    fontSize: 25, 
     fontWeight: 'bold', // Negrito
     marginBottom: 5,
   },
   postLabel: {
-    fontSize: 20, // Tamanho um pouco maior
+    fontSize: 20, 
     fontWeight: 'bold', // Negrito
   },
   postDetails: {
@@ -71,10 +71,4 @@ const styles = StyleSheet.create({
     marginTop: 0,
   },
 });
-
-
-
-
-
-
 
