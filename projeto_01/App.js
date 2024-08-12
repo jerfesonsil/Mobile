@@ -6,6 +6,7 @@ import MainScreen from './MainScreen';
 import PostDetailScreen from './PostDetailScreen';
 import CreatePostScreen from './CreatePostScreen';
 import LoginScreen from './LoginScreen';
+import CreateAccountScreen from './CreateAccountScreen';
 import { Ionicons } from '@expo/vector-icons';
 
 const Stack = createStackNavigator();
@@ -68,12 +69,19 @@ const App = () => {
             options={{ headerShown: false }}
           />
         ) : (
-          <Stack.Screen
-            name="LoginScreen"
-            options={{ headerShown: false }}
-          >
-            {props => <LoginScreen {...props} onLogin={handleLogin} />}
-          </Stack.Screen>
+          <>
+            <Stack.Screen
+              name="LoginScreen"
+              options={{ headerShown: false }}
+            >
+              {props => <LoginScreen {...props} onLogin={handleLogin} />}
+            </Stack.Screen>
+            <Stack.Screen
+              name="CreateAccount"
+              component={CreateAccountScreen}
+              options={{ title: 'Criar Conta' }}
+            />
+          </>
         )}
       </Stack.Navigator>
     </NavigationContainer>
